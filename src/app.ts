@@ -9,15 +9,25 @@ import orderRoute from "./routes/order.js";
 import paymentRoute from "./routes/payment.js";
 import dashboardRoute from "./routes/stats.js";
 import NodeCache from "node-cache";
+import {config} from "dotenv"
+import morgan from "morgan"
 
-const port = 8000;
+config({
+    path : "./.env"
+})
 
-connectDB();
+// console.log(process.env.PORT);
+
+const port = process.env.PORT || 8000;
+const mongoURI = process.env.MONGO_URI || "";
+
+connectDB(mongoURI);
 export const myCache = new NodeCache();
 
 const app = express();
 
 app.use(express.json());
+app.use(morgan("dev"))
 
 app.get("/",(req,res) => {
     res.send("API Working /api/v1")
